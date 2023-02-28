@@ -105,7 +105,7 @@ function displayTask(task){
         ${icon}
 
         <div class="info">
-            <h5>${task.title} <i style="color:${task.color}" class="fa-solid fa-tag"></i></h5>
+            <h5>${task.title} <i style="color:${task.color}" class="fa-solid fa-tag"></i> <i onclick="deleteTask()" class="fa-solid fa-trash"></i></h5>
             <p>${task.description}</p>
         </div>
 
@@ -121,6 +121,10 @@ function displayTask(task){
     `;
 
     $("#pending-tasks").append(syntax);
+}
+
+function deleteTask(){
+    alert("click");
 }
 
 function init() {
