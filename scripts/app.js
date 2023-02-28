@@ -16,6 +16,7 @@ var createTaskFlag = true;
 let importanceIcon = $("#importantIcon");
 let createTaskButton = $("#btnCreateTask");
 let createTaskForm = $("form");
+let saveTaskButton = $("#btnSaveTask");
 
 function toggleImportant() {
 
@@ -55,12 +56,80 @@ function createTask(){
     }
 }
 
+function saveTask(){
+    //console.log("Save Task");
+    let title = $("#taskTitle").val();
+    let description = $("#taskDescription").val();
+    let dueDate = $("#taskDueDate").val();
+    let category = $("#taskCategory").val();
+    let color = $("#taskColor").val();
+    let priority = $("#taskPriority").val();
+
+
+    //console.log( title, description,  dueDate, category, color, priority);
+
+    /*Create a new task (object) using the class 
+    created in task.js */
+    let task = new Task(isImportant, title, description, category, dueDate, priority, color);
+
+    console.log(task);
+    
+    //Display a task in screen
+    displayTask(task);
+
+    clearForm();
+}
+
+function clearForm(){
+    $("#taskTitle").val('');
+    $("#taskDescription").val('');
+    $("#taskDueDate").val('');
+    $("#taskCategory").val('');
+    $("#taskColor").val('');
+    $("#taskPriority").val('');
+}
+
+function displayTask(task){
+
+    let icon = "";
+
+    if(task.isImportant){
+        icon = `<i style="font-size: 20px" class='${important}'></i>`
+    }else{
+        icon = `<i style="font-size: 20px"  class='${noImportant}'></i>`
+    }
+
+    let syntax = `
+    <div class="task" style="border: 1px solid ${task.color}">
+       
+        ${icon}
+
+        <div class="info">
+            <h5>${task.title} <i style="color:${task.color}" class="fa-solid fa-tag"></i></h5>
+            <p>${task.description}</p>
+        </div>
+
+        <label class="category"> <span class="bold-text">Due Date:</span> ${task.dueDate}</label> 
+
+        <div class="details">
+            <label> <span class="bold-text">Priority:</span> ${task.priority}</label>
+            <label> <span class="bold-text">Category:</span> ${task.category}</label>
+        </div>
+        
+    </div>
+    
+    `;
+
+    $("#pending-tasks").append(syntax);
+}
+
 function init() {
     console.log("Task manager");
 
     //hook events
     importanceIcon.click(toggleImportant);
     createTaskButton.click(createTask);
+    saveTaskButton.click(saveTask);
 
     //load data
 
