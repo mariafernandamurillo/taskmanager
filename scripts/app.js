@@ -73,11 +73,31 @@ function saveTask(){
     let task = new Task(isImportant, title, description, category, dueDate, priority, color);
 
     console.log(task);
-    
-    //Display a task in screen
-    displayTask(task);
 
-    clearForm();
+    //AJAX logic
+    //try to POST the responses to the server
+    $.ajax({
+
+        //connect to a server using the GET verb/method
+        type: "POST", 
+        url: "http://fsdiapi.azurewebsites.net/api/tasks/",
+        data: JSON.stringify(task),
+        contentType:"application/json",
+
+        //Create the responses (Try and Catch)
+        success: function(response){
+            console.log(response);
+            //Display a task in screen
+            displayTask(task);
+            
+            clearForm();
+        },
+        error: function(error){
+            console.log(error);
+            alert("Unexpected error");
+        }
+
+    });
 }
 
 function clearForm(){
@@ -127,16 +147,59 @@ function deleteTask(){
     alert("click");
 }
 
+// fetch
+
+//First we create a function
+function testRequest(){
+    //then we start to use AJAX
+    $.ajax({
+
+        //connect to a server using the GET verb/method
+        type: "GET", 
+        url: "http://fsdiapi.azurewebsites.net/",
+
+        //Create the responses (Try and Catch)
+        success: function(res){
+           // let data = JSON.parse(res);
+            console.log(res);
+            //console.log(data);
+        },
+        error: function(error){
+            console.log(error);
+        }
+
+    });
+}
+
+function loadTask(){
+    $.ajax({
+        type: "GET", 
+        url: "http://fsdiapi.azurewebsites.net/api/tasks",
+        
+        success: function(res){
+            let data = JSON.parse(res);
+            console.log(res);
+            console.log(data);
+            
+        },
+        error: function(error){
+            console.log(error);
+            alert("Unexpected error");
+        }
+
+    });
+};
+
 function init() {
     console.log("Task manager");
+
+    //load data
+    loadTask();
 
     //hook events
     importanceIcon.click(toggleImportant);
     createTaskButton.click(createTask);
     saveTaskButton.click(saveTask);
-
-    //load data
-
 }
 
 window.onload = init;
